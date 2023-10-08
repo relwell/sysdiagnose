@@ -78,7 +78,7 @@ def list_parsers(folder):
     headers = ['Parser Name', 'Parser Description', 'Parser Input']
 
     logger.info(tabulate(lines, headers=headers))
-
+    return []
 
 """
     Parse
@@ -139,7 +139,7 @@ def parse(parser, case_id):
 
     logger.info(f'Execution success, output saved in: {output_file}', file=sys.stderr)
 
-    return 0
+    return result
 
 
 """
@@ -154,14 +154,17 @@ def parse_all(case_id):
     os.chdir(config.parsers_folder)
     modules = glob.glob(os.path.join(os.path.dirname('.'), "*.py"))
     os.chdir('..')
+    result = []
     for parser in modules:
         try:
             logger.info(f"Trying: {parser[:-3]}", file=sys.stderr)
-            parse(parser[:-3], case_id)
-        except:     # noqa: E722
-            continue
-    return 0
+            result.append(
+                {"parser": parser[:-3], "result": parse(parser[:-3], case_id)}
+            )
+        except Exception:
+            logger.exception("Couldn't parse %s", parser[:-3])
 
+    return result
 
 """
     Main function
