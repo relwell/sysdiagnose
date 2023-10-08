@@ -3,6 +3,7 @@
 # For Python3
 # Author: Aaron Kaplan <aaron@lo-res.org>
 
+import logging
 import os
 import sys
 import json
@@ -11,6 +12,8 @@ from optparse import OptionParser
 
 import gpxpy
 import gpxpy.gpx
+
+logger = logging.getLogger()
 
 sys.path.append('..')   # noqa: E402
 from sysdiagnose import config        # noqa: E402

@@ -14,12 +14,15 @@ Options:
   -h --help     Show this screen.
   -v --version     Show version.
 """
+import logging
 import os
 from optparse import OptionParser
 import json
 import ijson
 from docopt import docopt
 import glob
+
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-demo-analyser.py v2023-04-28 Version 0.1"
 

@@ -4,12 +4,14 @@
 # DEMO - Skeleton
 # Author: david@autopsit.org
 
+import logging
 import os
 import sys
 import json
 from datetime import datetime
 from optparse import OptionParser
 
+logger = logging.getLogger()
 version_string = "sysdiagnose-demo-analyser.py v2023-04-28 Version 0.1"
 
 # ----- definition for analyse.py script -----#

@@ -6,12 +6,14 @@
 #
 # Important note: timestamp are in microseconds! standard epoch is in seconds.
 
+import logging
 import os
 import sys
 import json
 from datetime import datetime
 from optparse import OptionParser
 
+logger = logging.getLogger()
 version_string = "sysdiagnose-timeliner.py v2023-04-05 Version 0.1"
 
 # ----- definition for analyse.py script -----#
