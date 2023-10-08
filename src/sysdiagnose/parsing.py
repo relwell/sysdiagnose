@@ -162,7 +162,8 @@ def parse_all(case_id):
                 {"parser": parser[:-3], "result": parse(parser[:-3], case_id)}
             )
         except Exception:
-            logger.exception("Couldn't parse %s", parser[:-3])
+            if parser[:-3] != "sysdiagnose_demo_parser":
+                logger.exception("Couldn't parse %s", parser[:-3])
 
     return result
 
