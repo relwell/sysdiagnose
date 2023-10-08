@@ -26,8 +26,8 @@ parser_call = "get_accessibility_tcc"
 
 def get_accessibility_tcc(dbpath, ios_version=13):
     sys.path.append(os.path.abspath('../'))
-    from utils import times
-    from utils import sqlite2json
+    from sysdiagnose.utils import times
+    from sysdiagnose.utils import sqlite2json
 
     tcc = sqlite2json.sqlite2struct(dbpath)
     return tcc
@@ -36,8 +36,8 @@ def get_accessibility_tcc(dbpath, ios_version=13):
 
 def print_accessibility_tcc(inputfile):
     sys.path.append(os.path.abspath('../'))
-    from utils import times
-    from utils import sqlite2json
+    from sysdiagnose.utils import times
+    from sysdiagnose.utils import sqlite2json
     logger.info(sqlite2json.dump2json(get_accessibility_tcc(inputfile)))
     return
 

@@ -92,8 +92,8 @@ def normalize_unified_logs(filename="./unifiedlogs.sqlite", output=sys.stdout):
     This required to get a SQLITE output from UnifiedLogs
     """
     sys.path.append(os.path.abspath('../'))
-    from utils import times
-    from utils import sqlite2json
+    from sysdiagnose.utils import times
+    from sysdiagnose.utils import sqlite2json
 
     unifiedlogs = sqlite2json.sqlite2struct(filename)
     try:

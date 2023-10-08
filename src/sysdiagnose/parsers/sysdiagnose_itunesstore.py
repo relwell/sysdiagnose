@@ -28,8 +28,8 @@ parser_call = "get_itunesstore"
 
 def get_itunesstore(dbpath, ios_version=13):
     sys.path.append(os.path.abspath('../'))
-    from utils import times
-    from utils import sqlite2json
+    from sysdiagnose.utils import times
+    from sysdiagnose.utils import sqlite2json
 
     itunes = sqlite2json.sqlite2struct(dbpath)
     return json.loads(sqlite2json.dump2json(itunes))

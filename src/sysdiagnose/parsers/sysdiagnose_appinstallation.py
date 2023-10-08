@@ -61,8 +61,8 @@ def print_appinstall_ios12(dbpath):
 
 
 def get_appinstallation_ios13(dbpath):
-    from utils import times
-    from utils import sqlite2json
+    from sysdiagnose.utils import times
+    from sysdiagnose.utils import sqlite2json
 
     appinstallation = sqlite2json.sqlite2struct(dbpath)
     return json.loads(sqlite2json.dump2json(appinstallation))
