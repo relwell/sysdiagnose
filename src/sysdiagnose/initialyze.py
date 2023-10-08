@@ -66,8 +66,8 @@ def init(sysdiagnose_file, force=False):
             if force:
                 case_id = case['case_id'] -1
             else:
-                logger.error(f"this sysdiagnose has already been extracted : caseID: {str(case['case_id'])}")
-                return
+                logger.warning(f"this sysdiagnose has already been extracted : caseID: {str(case['case_id'])}")
+                return case
 
     # test sysdiagnose file
     try:
@@ -279,13 +279,13 @@ def init(sysdiagnose_file, force=False):
     with open(new_case['case_file'], 'w') as data_file:
         data_file.write(json.dumps(new_case_json, indent=4))
 
+    new_case["data"] = new_case_json
+
     # update cases list file
     cases['cases'].append(new_case)
 
     with open(config.cases_file, 'w') as data_file:
         data_file.write(json.dumps(cases, indent=4))
-
-    new_case["data"] = new_case_json
 
     logger.info("Sysdiagnose file has been processed")
     logger.info(f"New case ID: {str(new_case['case_id'])}")
