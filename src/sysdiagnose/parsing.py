@@ -169,7 +169,7 @@ def parse_all(case_id, denylist=[]):
             logger.debug(f"Successfully parsed key", extra={"data": result[-1]["result"]})
         except KeyError as e:
             # the same value indicates the case just doesn't have it
-            if key.endswdith(e.args[0]):
+            if key.endswith(e.args[0]):
                 logger.exception("Couldn't parse %s", key)
         except Exception:
             if key != "sysdiagnose_demo_parser":
