@@ -5,7 +5,7 @@ This file contains all of the configuration values for the project.
 """
 
 
-cases_file = "cases.json"
+cases_file = "/tmp/sysdiagnose_cases.json"
 data_folder = "/tmp/sysdiagnose_data/"
 parsed_data_folder = "/tmp/sysdiagnose_parsed_data/"
 parsers_folder = f"{os.path.dirname(__file__)}/parsers/"
