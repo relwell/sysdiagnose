@@ -4,6 +4,7 @@
 # Demo blank parsers
 # Author: david@autopsit.org
 
+import logging
 import os
 import sys
 import json
@@ -11,6 +12,8 @@ from optparse import OptionParser
 import time
 import struct
 import datetime
+
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-demo-parser.py v2023-04-26 Version 1.0"
 
@@ -40,7 +43,7 @@ def main():
         Main function, to be called when used as CLI tool
     """
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -56,7 +59,7 @@ def main():
         sys.exit(-1)
 
     # Call the demo function when called directly from CLI
-    print(demo_function(options.inputfile))
+    logger.info(demo_function(options.inputfile))
 
 # --------------------------------------------------------------------------- #
 

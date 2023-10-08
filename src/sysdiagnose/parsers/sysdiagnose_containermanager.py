@@ -16,6 +16,7 @@ Options:
   -v --version     Show version.
 """
 
+import logging
 import sys
 from optparse import OptionParser
 import plistlib
@@ -25,6 +26,7 @@ from tabulate import tabulate
 import glob
 import re
 
+logger = logging.getLogger()
 
 # ----- definition for parsing.py script -----#
 
@@ -120,9 +122,9 @@ def main():
         # try:
         loglist = glob.glob(arguments['<logfolder>'] + '/containermanagerd.log*')
         events = parsecontainermanager(loglist)
-        print(json.dumps(events, indent=4))
+        logger.info(json.dumps(events, indent=4))
         # except:
-        #    print("error retrieving log files")
+        #    logger.info("error retrieving log files")
     # test
 
     return 0

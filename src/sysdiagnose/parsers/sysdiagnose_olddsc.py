@@ -5,12 +5,14 @@
 # Author: david@autopsit.org
 #
 #
+import logging
 import os
 import sys
 import json
 from optparse import OptionParser
 import xml.etree.ElementTree as ElementTree
 
+logger = logging.getLogger()
 version_string = "sysdiagnose-olddsc.py v2020-02-26 Version 1.0"
 
 # ----- definition for parsing.py script -----#
@@ -99,14 +101,14 @@ def saveJson(text, output):
         if (fd is not sys.stdout):
             fd.close()
     except Exception as e:
-        print(f"Impossible to save to JSON to {output}. Reason: {str(e)}\n")
+        logger.info(f"Impossible to save to JSON to {output}. Reason: {str(e)}\n")
     return
 
 
 def get_olddsc(folder, ios_version=13, output=sys.stdout):
     # check if folder exists and is really a folder
     if (not (os.path.exists(folder) and os.path.isdir(folder))):
-        print(f"{folder} is not a valid folder!")
+        logger.info(f"{folder} is not a valid folder!")
         return False
     # list all files in the folder and parse files
     # r=root, d=directories, f = files
@@ -125,7 +127,7 @@ def get_olddsc(folder, ios_version=13, output=sys.stdout):
 
 def main():
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -144,7 +146,7 @@ def main():
     if options.inputfile:
         get_olddsc(options.inputfile)
     else:
-        print("WARNING -i option is mandatory!")
+        logger.info("WARNING -i option is mandatory!")
 
 # --------------------------------------------------------------------------- #
 

@@ -16,6 +16,7 @@ Options:
   -v --version     Show version.
 """
 
+import logging
 import sys
 from optparse import OptionParser
 import plistlib
@@ -23,6 +24,8 @@ import json
 from docopt import docopt
 import glob
 import re
+
+logger = logging.getLogger()
 
 # ----- definition for parsing.py script -----#
 
@@ -36,7 +39,7 @@ def parsewifiscan(wifi_data):
     output = []
     for data in wifi_data:
         if data.endswith('.txt'):
-            print('parsing: ' + data)
+            logger.info('parsing: ' + data)
             with open(data, 'r') as f:
                 for line in f:
                     if line.strip():
@@ -70,7 +73,7 @@ def main():
         # list scan files in folder and build a list
         scanlist = glob.glob(arguments['<logfolder>'] + '/wifi_scan*.txt')
         output = parsewifiscan(scanlist)
-        print(json.dumps(output, indent=4))
+        logger.info(json.dumps(output, indent=4))
 
 # --------------------------------------------------------------------------- #
 

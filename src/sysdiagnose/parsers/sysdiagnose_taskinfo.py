@@ -7,10 +7,13 @@
 # TODO define output
 # - search this artifact to extract more
 #
+import logging
 import re
 import sys
 import json
 from optparse import OptionParser
+
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-taskinfo.py v2020-02-07 Version 1.0"
 
@@ -40,7 +43,7 @@ def get_num_tasks(filename, ios_version=13):
         fd.close()
 
     except Exception as e:
-        print(f"Impossible to parse taskinfo.txt: {str(e)}")
+        logger.info(f"Impossible to parse taskinfo.txt: {str(e)}")
     return num_tasks
 
 
@@ -219,7 +222,7 @@ def parse_task_block(fd, current_threat_id, ios_version=13):
 
         # Handline unknown
         else:
-            print(f"WARNING: Unexpected line detected for tasks: {current_threat_id} ({line})")
+            logger.info(f"WARNING: Unexpected line detected for tasks: {current_threat_id} ({line})")
             continue  # unknown line
 
     return result
@@ -237,7 +240,7 @@ def search_task_block(fd, ios_version):
                 continue
 
     except Exception as e:
-        print(f"An unknown error occurs while searching for task block. Reason: {str(e)}")
+        logger.info(f"An unknown error occurs while searching for task block. Reason: {str(e)}")
 
     return result
 
@@ -264,7 +267,7 @@ def get_tasks(filename, ios_version=13):
                 continue
         fd.close()
     except Exception as e:
-        print(f"Could not open {filename}")
+        logger.info(f"Could not open {filename}")
 
     return {"numb_tasks": numb_tasks, "tasks": tasks}
 
@@ -278,7 +281,7 @@ def get_tasks(filename, ios_version=13):
 
 def main():
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -295,9 +298,9 @@ def main():
 
     # parse PS file :)
     if options.inputfile:
-        print(f"Number of tasks on device: {get_num_tasks(options.inputfile)}")
+        logger.info(f"Number of tasks on device: {get_num_tasks(options.inputfile)}")
     else:
-        print("WARNING -i option is mandatory!")
+        logger.info("WARNING -i option is mandatory!")
 
 
 # --------------------------------------------------------------------------- #

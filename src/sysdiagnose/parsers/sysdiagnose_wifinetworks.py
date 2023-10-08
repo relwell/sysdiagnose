@@ -16,6 +16,7 @@ Options:
   -v --version     Show version.
 """
 
+import logging
 import sys
 from optparse import OptionParser
 import json
@@ -23,6 +24,8 @@ from docopt import docopt
 import glob
 sys.path.append('..')   # noqa: E402
 from sysdiagnose import misc        # noqa: E402
+
+logger = logging.getLogger()
 
 # ----- definition for parsing.py script -----#
 
@@ -37,7 +40,7 @@ def parsewifinetwork(wifi_data):
     output = {}
     for data in wifi_data:
         if data.endswith('com.apple.wifi.recent-networks.json'):
-            print('parsing: ' + data)
+            logger.info('parsing: ' + data)
             with open(data, 'r') as f:
                 output['recent_networks'] = json.load(f)
         if data.endswith('.plist'):
@@ -59,7 +62,7 @@ def main():
         plist_files = glob.glob(arguments['<logfolder>'] + '/com.apple.wifi*.plist')
         plist_files.append(arguments['<logfolder>'] + '/com.apple.wifi.recent-networks.json')
         output = parsewifinetwork(plist_files)
-        print(json.dumps(output, indent=4))
+        logger.info(json.dumps(output, indent=4))
 
 # --------------------------------------------------------------------------- #
 

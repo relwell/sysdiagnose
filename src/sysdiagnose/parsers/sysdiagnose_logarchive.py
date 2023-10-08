@@ -6,12 +6,15 @@
 #
 #
 # TODO: fix print bug in main by adding an argument that output > stdout to get_logs
+import logging
 import os
 import sys
 import json
 import shutil
 import platform
 from optparse import OptionParser
+
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-logarchive.py v2020-02-07 Version 1.0"
 
@@ -99,7 +102,7 @@ def normalize_unified_logs(filename="./unifiedlogs.sqlite", output=sys.stdout):
             with open(output, "w") as outf:
                 outfd.write(sqlite2json.dump2json(unifiedlogs))
     except Exception as e:
-        print(f"Impossible to convert {filename} to JSON. Reason: {str(e)}")
+        logger.info(f"Impossible to convert {filename} to JSON. Reason: {str(e)}")
     return
 
 
@@ -131,8 +134,8 @@ def __execute_cmd_and_get_result(command, filename, outfile=sys.stdout):
                 try:
                     result['data'].append(json.loads(output))
                 except Exception as e:
-                    print(f"Something was not properly parsed : {str(e)}")
-                # print(result)
+                    logger.info(f"Something was not properly parsed : {str(e)}")
+                # logger.info(result)
         else:
             break
     if ((outfd is not sys.stdout) and (outfd is not None)):
@@ -148,7 +151,7 @@ def __execute_cmd_and_get_result(command, filename, outfile=sys.stdout):
 
 def main():
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -172,7 +175,7 @@ def main():
     elif options.unifiedlog:
         normalize_unified_logs(options.unifiedlog)
     else:
-        print("WARNING -i or -j option is mandatory!")
+        logger.info("WARNING -i or -j option is mandatory!")
 
 # --------------------------------------------------------------------------- #
 

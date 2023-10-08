@@ -9,11 +9,13 @@
 # - tree structure
 # - simplified
 #
+import logging
 import re
 import sys
 import json
 from optparse import OptionParser
 
+logger = logging.getLogger()
 version_string = "sysdiagnose-ps.py Version 1.0"
 
 # ----- definition for parsing.py script -----#
@@ -50,7 +52,7 @@ def parse_ps_thread(filename, ios_version=13):
 
 def main():
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -68,10 +70,10 @@ def main():
     # parse PS file :)
     if options.inputfile:
         processes = parse_ps_thread(options.inputfile)
-        print(json.dumps(processes, indent=4))
+        logger.info(json.dumps(processes, indent=4))
         # export_as_tree(processes, True)
     else:
-        print("WARNING -i option is mandatory!")
+        logger.info("WARNING -i option is mandatory!")
 
 
 # --------------------------------------------------------------------------- #

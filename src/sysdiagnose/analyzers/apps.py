@@ -85,7 +85,7 @@ def apps_analysis(jsondir, filename):
                                     apps[entry['subsystem']]= {"found": ['logarchive']}
                                 else:
                                     apps[entry['subsystem']]["found"].append('logarchive')
-    print(json.dumps(apps, indent=4))
+    logger.info(json.dumps(apps, indent=4))
 
     return
 

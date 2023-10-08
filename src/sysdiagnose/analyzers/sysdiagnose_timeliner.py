@@ -59,7 +59,7 @@ def __extract_ts_mobileactivation(filename):
                 return False
         return True
     except Exception as e:
-        print(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
+        logger.info(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
         return False
     return False
 
@@ -75,7 +75,7 @@ def __extract_ts_powerlogs(filename):
             __extract_ts_powerlogs__PLAccountingOperator_EventNone_Nodes(data)  # PLAccountingOperator_EventNone_Nodes
         return True
     except Exception as e:
-        print(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
+        logger.info(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
         return False
     return False
 
@@ -155,7 +155,7 @@ def __extract_ts_swcutil(filename):
                     timeline.append(ts_event)
         return True
     except Exception as e:
-        print(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
+        logger.info(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
         return False
     return False
 
@@ -201,7 +201,7 @@ def __extract_ts_accessibility_tcc(filename):
                     timeline.append(ts_event)
         return True
     except Exception as e:
-        print(f"ERROR while extracting timestamp from {filename}. Reason {str(e)}")
+        logger.info(f"ERROR while extracting timestamp from {filename}. Reason {str(e)}")
         return False
     return False
 
@@ -257,10 +257,10 @@ def __extract_ts_logarchive(filename):
                     }
                     timeline.append(ts_event)
                 except Exception as e:
-                    print(f"WARNING: trace not parsed: {trace}")
+                    logger.info(f"WARNING: trace not parsed: {trace}")
         return True
     except Exception as e:
-        print(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
+        logger.info(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
         return False
     return False
 
@@ -309,7 +309,7 @@ def __extract_ts_wifisecurity(filename):
                     timeline.append(ts_event)
         return True
     except Exception as e:
-        print(f"ERROR while extracting timestamp from {filename}. Reason {str(e)}")
+        logger.info(f"ERROR while extracting timestamp from {filename}. Reason {str(e)}")
         return False
     return False
 
@@ -356,7 +356,7 @@ def __extract_ts_wifi_known_networks(filename):
 
         return True
     except Exception as e:
-        print(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
+        logger.info(f"ERROR while extracting timestamp from {filename}. Reason: {str(e)}")
         return False
     return False
 
@@ -389,7 +389,7 @@ def save_timeline(timeline, ts_file):
                 line = json.dumps(event)
                 f.write("%s\n" % line)
     except Exception as e:
-        print(f"ERROR: impossible to save timeline to {timeline}. Reason: {str(e)}")
+        logger.info(f"ERROR: impossible to save timeline to {timeline}. Reason: {str(e)}")
 
 
 def generate_timeline(jsondir, filename):
@@ -409,7 +409,7 @@ def main():
         Main function
     """
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -d JSON directory\n"
 
@@ -433,9 +433,9 @@ def main():
         if options.outputfile:
             save_timeline(timeline, options.outputfile)
         else:
-            print(timeline)
+            logger.info(timeline)
     else:
-        print("WARNING -i option is mandatory!")
+        logger.info("WARNING -i option is mandatory!")
 
 
 # --------------------------------------------------------------------------- #

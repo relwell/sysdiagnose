@@ -1,7 +1,7 @@
 # generated data
-data/*
-cases.json
-parsed_data/*
+src/sysdiagnose/data/*
+src/sysdiagnose/cases.json
+src/sysdiagnose/parsed_data/*
 *.gpx
 
 # Byte-compiled / optimized / DLL files

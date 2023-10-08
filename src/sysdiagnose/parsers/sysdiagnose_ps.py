@@ -9,11 +9,13 @@
 # - tree structure
 # - simplified
 #
+import logging
 import re
 import sys
 import json
 from optparse import OptionParser
 
+logger = logging.getLogger()
 version_string = "sysdiagnose-ps.py v2023-03-10 Version 1.1"
 
 # ----- definition for parsing.py script -----#
@@ -87,7 +89,7 @@ def parse_ps(filename, ios_version=16):
 
         fd.close()
     except Exception as e:
-        print(f"Could not parse ps.txt: {str(e)}")
+        logger.info(f"Could not parse ps.txt: {str(e)}")
     return processes
 
 
@@ -103,7 +105,7 @@ def export_to_json(processes, filename="./ps.json"):
         fd.write(json_ps)
         fd.close()
     except Exception as e:
-        print(f"Impossible to dump the processes to {filename}. Reason: {str(e)}\n")
+        logger.info(f"Impossible to dump the processes to {filename}. Reason: {str(e)}\n")
 
 
 """
@@ -136,7 +138,7 @@ def _print_tree(ppid, node=0, depth=0):
 
     # loop on all the child of node
     for process in ppid[node]:
-        print(depth *"    " + "%s (PID: %d, PPID: %d, USER: %s)" %
+        logger.info(depth *"    " + "%s (PID: %d, PPID: %d, USER: %s)" %
               (process["COMMAND"], process["PID"], process["PPID"], process["USER"]))
         ppid = _print_tree(ppid, process["PID"], depth +1)  # recurse on childs of current process
     del ppid[node]  # remove the current child from process
@@ -169,7 +171,7 @@ def generate_graph(processes):
 
 def main():
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -189,7 +191,7 @@ def main():
         processes = parse_ps(options.inputfile)
         export_as_tree(processes, True)
     else:
-        print("WARNING -i option is mandatory!")
+        logger.info("WARNING -i option is mandatory!")
 
 
 # --------------------------------------------------------------------------- #

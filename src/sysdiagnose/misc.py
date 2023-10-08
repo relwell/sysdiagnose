@@ -1,5 +1,6 @@
 """Miscelanneous helper functions."""
 
+import logging
 import os
 import sys
 import json
@@ -8,6 +9,8 @@ import biplist
 from biplist import Uid, Data
 from datetime import datetime
 import binascii
+
+logger = logging.getLogger()
 
 class CustomEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -19,14 +22,13 @@ def get_version(filename="VERSION.txt"):
     """Read the program version from VERSION.txt"""
     try:
         script_dir = os.path.dirname(os.path.abspath(__file__))
-        print(script_dir)
         version_file = os.path.join(script_dir, filename)
         with open(version_file, "r") as file:
             data = json.load(file)
             version = data["version"]
             return version
     except Exception as e:
-        print(f"Could not read version info, bailing out. Something is wrong: {str(e)}")
+        logger.info(f"Could not read version info, bailing out. Something is wrong: {str(e)}")
         sys.exit(-1)
 
 def load_plist_and_fix(plist):

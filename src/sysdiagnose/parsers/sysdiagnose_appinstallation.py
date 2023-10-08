@@ -8,6 +8,7 @@
 # PID: encoded in Litlle Endian??
 # TODO - add support of iOS13...
 
+import logging
 import os
 import sys
 import json
@@ -16,6 +17,8 @@ import time
 import struct
 import datetime
 import sqlite3
+
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-appinstallation.py v2019-11-22 Version 2.0"
 
@@ -52,9 +55,9 @@ def print_appinstall_ios12(dbpath):
             # pid =  struct.pack('>I', pid)
 
             # print result
-            print(f"{pid},{bundle_id},{utctime}")
+            logger.info(f"{pid},{bundle_id},{utctime}")
     except Exception as e:
-        print(f"AN UNHANDLED ERROR OCCURED AND THE DB WAS NOT PARSED. Reason: {str(e)}")
+        logger.info(f"AN UNHANDLED ERROR OCCURED AND THE DB WAS NOT PARSED. Reason: {str(e)}")
 
 
 def get_appinstallation_ios13(dbpath):
@@ -72,7 +75,7 @@ def main():
         Main function, to be called when used as CLI tool
     """
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 

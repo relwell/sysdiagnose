@@ -16,7 +16,7 @@ Options:
   -h --help     Show this screen.
   -v --version     Show version.
 """
-
+import logging
 import sysdiagnose.config as config
 import parsing
 
@@ -28,6 +28,8 @@ from docopt import docopt
 from tabulate import tabulate
 
 version_string = "analyse.py v2023-04-27 Version 1.0"
+
+logger = logging.getLogger()
 
 
 def list_analysers(folder):
@@ -49,13 +51,13 @@ def list_analysers(folder):
 
     headers = ['Analyser Name', 'Analyser Description']
 
-    print(tabulate(lines, headers=headers))
+    logger.info(tabulate(lines, headers=headers))
 
 
 def analyse(analyser, caseid):
     # Load parser module
     spec = importlib.util.spec_from_file_location(analyser[:-3], config.analysers_folder + "/" + analyser + '.py')
-    print(spec, file=sys.stderr)
+    logger.info(spec, file=sys.stderr)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
 
@@ -65,7 +67,7 @@ def analyse(analyser, caseid):
     command = "module.%s('%s', '%s')" % (module.analyser_call, parse_data_path, output_file)
     result = eval(command)
 
-    print(f'Execution success, output saved in: {output_file}', file=sys.stderr)
+    logger.info(f'Execution success, output saved in: {output_file}', file=sys.stderr)
 
     return 0
 
@@ -76,7 +78,7 @@ def allanalysers(caseid):
     os.chdir('..')
     for analyser in modules:
         try:
-            print(f'Trying: {analyser[:-3]}', file=sys.stderr)
+            logger.info(f'Trying: {analyser[:-3]}', file=sys.stderr)
             analyse(analyser[:-3], caseid)
         except:     # noqa: E722
             continue
@@ -90,7 +92,7 @@ def main():
     Main function
     """
     if sys.version_info[0] < 3:
-        print("Must be using Python 3! Exiting ...", file=sys.stderr)
+        logger.info("Must be using Python 3! Exiting ...", file=sys.stderr)
         sys.exit(-1)
 
     arguments = docopt(__doc__, version=version_string)
@@ -102,14 +104,14 @@ def main():
         if arguments['<case_number>'].isdigit():
             analyse(arguments['<analyser>'], arguments['<case_number>'])
         else:
-            print("case number should be ... a number ...", file=sys.stderr)
+            logger.info("case number should be ... a number ...", file=sys.stderr)
     elif arguments['allanalysers']:
         if arguments['<case_number>'].isdigit():
             allanalysers(arguments['<case_number>'])
         else:
-            print("case number should be ... a number ...", file=sys.stderr)
+            logger.info("case number should be ... a number ...", file=sys.stderr)
 
-    print(f"Running {version_string}\n", file=sys.stderr)
+    logger.info(f"Running {version_string}\n", file=sys.stderr)
     return
 
 

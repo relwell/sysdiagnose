@@ -4,10 +4,13 @@
 # Script to print from iTunes Store
 # Author: david@autopsit.org
 
+import logging
 import os
 import sys
 import json
 from optparse import OptionParser
+
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-itunesstore.py v2020-20-19 Version 1.0"
 
@@ -33,7 +36,7 @@ def get_itunesstore(dbpath, ios_version=13):
 
 
 def print_itunesstore(inputfile):
-    print(get_itunesstore(inputfile))
+    logger.info(get_itunesstore(inputfile))
     return
 
 
@@ -44,7 +47,7 @@ def main():
         Main function, to be called when used as CLI tool
     """
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 

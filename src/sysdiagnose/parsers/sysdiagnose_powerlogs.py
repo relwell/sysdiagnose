@@ -4,10 +4,12 @@
 # Script to print from powerlogs (last 3 days of logs)
 # Author: david@autopsit.org
 
+import logging
 import os
 import sys
 from optparse import OptionParser
 
+logger = logging.getLogger()
 version_string = "sysdiagnose-powerlogs.py v2020-20-19 Version 1.0"
 
 # ----- definition for parsing.py script -----#
@@ -33,7 +35,7 @@ def get_powerlogs(dbpath, ios_version=13):
 
 
 def print_powerlogs(inputfile):
-    print(get_powerlogs(inputfile))
+    logger.info(get_powerlogs(inputfile))
     return
 
 
@@ -44,7 +46,7 @@ def main():
         Main function, to be called when used as CLI tool
     """
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -58,7 +60,7 @@ def main():
     if len(sys.argv) == 1:
         parser.print_help()
         sys.exit(-1)
-    # print(options.inputfile)
+    # logger.info(options.inputfile)
     print_powerlogs(options.inputfile)
 
 # --------------------------------------------------------------------------- #

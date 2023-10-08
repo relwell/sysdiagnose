@@ -6,10 +6,12 @@
 #
 # Change log: David DURVAUX - add function are more granular approach
 
+import logging
 import sys
 from optparse import OptionParser
 import plistlib
 
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-net-ext-cache.py v2019-05-10 Version 2.0"
 
@@ -26,7 +28,7 @@ def getNetExtCache(filename, ios_version=13):
                 for key, list1 in pl["app-rules"].items():
                     result.append([str(key), list1])
     except Exception as e:
-        print(f"Impossible to parse {filename}. Reason: {str(e)}")
+        logger.info(f"Impossible to parse {filename}. Reason: {str(e)}")
     return result
 
 
@@ -50,7 +52,7 @@ def main():
         parser.print_help()
         sys.exit(-1)
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     result = getNetExtCache(options.inputfile)
     count = 0
@@ -58,11 +60,11 @@ def main():
         count += 1
         [key, list1] = line
         if (options.verbose):
-            print(str(key) + " = " + ', '.join(list1))   # verbose with GUIDs
+            logger.info(str(key) + " = " + ', '.join(list1))   # verbose with GUIDs
         else:
-            print(str(key))   # just app names
+            logger.info(str(key))   # just app names
 
-    print(f"\n {str(count)} cache entries retrieved\n")
+    logger.info(f"\n {str(count)} cache entries retrieved\n")
 
 
 """

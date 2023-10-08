@@ -16,6 +16,7 @@ Options:
   -v --version     Show version.
 """
 
+import logging
 import sys
 from optparse import OptionParser
 import plistlib
@@ -24,6 +25,7 @@ import pprint
 from docopt import docopt
 from tabulate import tabulate
 
+logger = logging.getLogger()
 
 # ----- definition for parsing.py script -----#
 # -----         DO NOT DELETE             ----#
@@ -39,7 +41,7 @@ def parseplist(file):
     with open(file, 'rb') as fp:
         pl = plistlib.load(fp)
 
-    # pprint.pprint(pl)
+    # pprint.plogger.info(pl)
 
     return pl['app-rules']
 
@@ -74,9 +76,9 @@ def main():
             for key, val in apprules.items():
                 line=[key, val]
                 lines.append(line)
-            print(tabulate(lines, headers=headers))
+            logger.info(tabulate(lines, headers=headers))
         except Exception as e:
-            print(f'Error: {str(e)}')
+            logger.info(f'Error: {str(e)}')
 
     # parseplist("../data/1/sysdiagnose_2019.02.13_15-50-14+0100_iPhone_OS_iPhone_16C101/logs/Networking/com.apple.networkextension.plist")
 

@@ -6,6 +6,7 @@
 #
 # Change log: Aaron Kaplan, initial version.
 
+import logging
 import sys
 import json
 import os
@@ -22,6 +23,8 @@ class CustomEncoder(json.JSONEncoder):
         if isinstance(obj, Uid) or isinstance(obj, Data) or isinstance(obj, datetime):
             return str(obj)
         return super().default(obj)
+
+logger = logging.getLogger()
 
 
 version_string = "sysdiagnose_wifi_known_networks.py v2023-05-19 Version 1.0"
@@ -50,11 +53,11 @@ def getKnownWifiNetworks(plistfiles=[], ios_version=13):
                 with open(path, 'rb') as fp:
                     result = biplist.readPlist(fp)
                     if config.debug:
-                        print(f"Type (result) = {type(result)}", file=sys.stderr)
-                        print(f"XXXX DEBUG:", file=sys.stderr)
-                        print(json.dumps(result, indent=4, cls=CustomEncoder), file=sys.stderr)
+                        logger.info(f"Type (result) = {type(result)}", file=sys.stderr)
+                        logger.info(f"XXXX DEBUG:", file=sys.stderr)
+                        logger.info(json.dumps(result, indent=4, cls=CustomEncoder), file=sys.stderr)
             except Exception as e:
-                print(f"Could not parse {path}. Reason: {str(e)}", file=sys.stderr)
+                logger.info(f"Could not parse {path}. Reason: {str(e)}", file=sys.stderr)
     return json.loads(json.dumps(result, indent=4, cls=CustomEncoder))
 
 
@@ -62,7 +65,7 @@ def main():
     """
         Main function, to be called when used as CLI tool
     """
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -73,9 +76,9 @@ def main():
 
     if options.inputfile:
         pl = getKnownWifiNetworks(options.inputfile)
-        print(json.dumps(pl, indent=4, cls=CustomEncoder), file=sys.stderr)
+        logger.info(json.dumps(pl, indent=4, cls=CustomEncoder), file=sys.stderr)
     else:
-        print("WARNING -i option is mandatory!", file=sys.stderr)
+        logger.info("WARNING -i option is mandatory!", file=sys.stderr)
 
 
 # --------------------------------------------------------------------------- #

@@ -37,12 +37,12 @@ def generate_gpx(jsonfile: str, outfile: str = "wifi-geolocations.gpx"):
         with open(jsonfile, 'r') as fp:
             json_data = json.load(fp)
     except Exception as e:
-        print(f"Error while parsing inputfile JSON. Reason: {str(e)}")
+        logger.info(f"Error while parsing inputfile JSON. Reason: {str(e)}")
         sys.exit(-1)
 
     json_entry = json_data.get('com.apple.wifi.known-networks.plist')
     if not json_entry:
-        print("Could not find the 'com.apple.wifi.known-networks.plist' section. Bailing out.", file=sys.stderr)
+        logger.info("Could not find the 'com.apple.wifi.known-networks.plist' section. Bailing out.", file=sys.stderr)
         sys.exit(-2)
     json_data = json_entry      # start here
 
@@ -54,7 +54,7 @@ def generate_gpx(jsonfile: str, outfile: str = "wifi-geolocations.gpx"):
         # timestamps are always tricky
         timestamp_str = network_data.get('AddedAt', '')
         if config.debug:
-            print(f"AddedAt: {timestamp_str}")
+            logger.info(f"AddedAt: {timestamp_str}")
         if not timestamp_str:
             timestamp_str = network_data.get('JoinedByUserAt', '')      # second best attempt
         if not timestamp_str:
@@ -65,7 +65,7 @@ def generate_gpx(jsonfile: str, outfile: str = "wifi-geolocations.gpx"):
         try:
             timestamp = dateutil.parser.parse(timestamp_str)
         except Exception as e:
-            print(f"Error converting timestamp. Reason: {str(e)}. Timestamp was: {str(timestamp_str)}. Assuming Jan 1st 1970.")
+            logger.info(f"Error converting timestamp. Reason: {str(e)}. Timestamp was: {str(timestamp_str)}. Assuming Jan 1st 1970.")
             timestamp = dateutil.parser.parse('1970-01-01')     # begin of epoch
 
         bssid = network_data.get('__OSSpecific__', {}).get('BSSID', '')
@@ -101,7 +101,7 @@ def generate_gpx(jsonfile: str, outfile: str = "wifi-geolocations.gpx"):
 """
 def main():
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -d JSON directory\n"
 

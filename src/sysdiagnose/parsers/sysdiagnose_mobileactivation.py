@@ -16,6 +16,7 @@ Options:
   -v --version     Show version.
 """
 
+import logging
 import sys
 from optparse import OptionParser
 import plistlib
@@ -24,6 +25,8 @@ from docopt import docopt
 from tabulate import tabulate
 import glob
 import re
+
+logger = logging.getLogger()
 
 
 # ----- definition for parsing.py script -----#
@@ -78,12 +81,12 @@ def parsemobactiv(loglist):
                 act_lines.append(line.strip())
             elif "<notice>" in line.strip():
                 buildlogentry_notice(line.strip())
-    # print(json.dumps(events,indent=4))
+    # logger.info(json.dumps(events,indent=4))
     return events
 
 
 def buildlogentry_actentry(lines):
-    # print(lines)
+    # logger.info(lines)
     event = {'loglevel': 'debug'}
     # get timestamp
     timeregex = re.search(r"(?<=^)(.*)(?= \[)", lines[0])
@@ -145,7 +148,7 @@ def main():
         # list files in folder and build list object
         # try:
         loglist = glob.glob(arguments['<logfolder>'] + '/mobileactivationd.log*')
-        print(json.dumps(parsemobactiv(loglist), indent=4))
+        logger.info(json.dumps(parsemobactiv(loglist), indent=4))
 
     return 0
 

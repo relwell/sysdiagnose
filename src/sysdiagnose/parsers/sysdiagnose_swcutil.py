@@ -16,6 +16,7 @@ Options:
   -v --version     Show version.
 """
 
+import logging
 import sys
 from optparse import OptionParser
 import plistlib
@@ -23,6 +24,7 @@ import json
 from docopt import docopt
 from tabulate import tabulate
 
+logger = logging.getLogger()
 
 # ----- definition for parsing.py script -----#
 # -----         DO NOT DELETE             ----#
@@ -120,7 +122,7 @@ def main():
         # Output is good enough, just print
         with open(arguments['<file>'], 'r') as f_in:
             for line in f_in:
-                print(line.strip())
+                logger.info(line.strip())
         # parseswcutil(arguments['<file>'])
         sys.exit()
     ### test

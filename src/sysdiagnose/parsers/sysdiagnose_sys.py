@@ -6,9 +6,12 @@
 #
 # Change log: David DURVAUX - add function are more granular approach
 
+import logging
 import sys
 from optparse import OptionParser
 import plistlib
+
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-sys.py v2019-05-10 Version 2.0"
 
@@ -47,10 +50,10 @@ def getProductInfo(path="./logs/SystemVersion/SystemVersion.plist", ios_version=
             if key in plist.keys():
                 result[key] = plist[key]
             else:
-                print(f"WARNING: {key} not found in plist file {path}. Ignoring key.", file=sys.stderr)
+                logger.info(f"WARNING: {key} not found in plist file {path}. Ignoring key.", file=sys.stderr)
         fd.close()
     except Exception as e:
-        print(f"Could not parse {path}. Reason: {str(e)}", file=sys.stderr)
+        logger.info(f"Could not parse {path}. Reason: {str(e)}", file=sys.stderr)
     return result
 
 
@@ -59,10 +62,10 @@ def main():
         Main function, to be called when used as CLI tool
     """
     if sys.version_info[0] < 3:
-        print("Must be using Python 3! Exiting ...", file=sys.stderr)
+        logger.info("Must be using Python 3! Exiting ...", file=sys.stderr)
         sys.exit(-1)
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -73,11 +76,11 @@ def main():
 
     if options.inputfile:
         pl = getProductInfo(options.inputfile)
-        print(f"ProductName = {pl['ProductName']}")       # XXX #9 FIXME: should that return the structure instead of print() ing it?
-        print(f"ProductVersion = {pl['ProductVersion']}")
-        print(f"ProductBuildVersion = {pl['ProductBuildVersion']}")
+        logger.info(f"ProductName = {pl['ProductName']}")       # XXX #9 FIXME: should that return the structure instead of logger.info() ing it?
+        logger.info(f"ProductVersion = {pl['ProductVersion']}")
+        logger.info(f"ProductBuildVersion = {pl['ProductBuildVersion']}")
     else:
-        print("WARNING -i option is mandatory!", file=sys.stderr)
+        logger.info("WARNING -i option is mandatory!", file=sys.stderr)
 
 
 # --------------------------------------------------------------------------- #

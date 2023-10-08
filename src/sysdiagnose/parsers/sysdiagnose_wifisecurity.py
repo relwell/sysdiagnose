@@ -4,6 +4,7 @@
 # Script to print WIFI info from ./WiFi/security.txt
 # Author: david@autopsit.org
 
+import logging
 import os
 import sys
 import json
@@ -13,6 +14,8 @@ import struct
 import datetime
 
 version_string = "sysdiagnose-wifisecurity.py v2023-04-26 Version 1.0"
+
+logger = logging.getLogger()
 
 # ----- definition for parsing.py script -----#
 
@@ -79,7 +82,7 @@ def get_wifi_security_log(filepath, ios_version=16):
                 wifi_el = {}
         fd.close()
     except Exception as e:
-        print(f"Could not parse: {filepath}. Reason: {str(e)}")
+        logger.info(f"Could not parse: {filepath}. Reason: {str(e)}")
     return wifi
 
 
@@ -90,7 +93,7 @@ def main():
         Main function, to be called when used as CLI tool
     """
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 
@@ -105,7 +108,7 @@ def main():
         parser.print_help()
         sys.exit(-1)
 
-    print(get_wifi_security_log(options.inputfile))
+    logger.info(get_wifi_security_log(options.inputfile))
 
 # --------------------------------------------------------------------------- #
 

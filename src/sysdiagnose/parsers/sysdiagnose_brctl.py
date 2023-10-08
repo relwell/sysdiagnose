@@ -16,6 +16,7 @@ Options:
   -v --version     Show version.
 """
 
+import logging
 import sys
 from optparse import OptionParser
 import plistlib
@@ -27,6 +28,7 @@ import re
 import csv
 import io
 
+logger = logging.getLogger()
 
 # ----- definition for parsing.py script -----#
 # -----         DO NOT DELETE             ----#
@@ -39,7 +41,7 @@ parser_call = "parsebrctl"
 def parselistfile(container_list_file):
     containers = {"containers": []}
     result = []
-    # print(container_list_file)
+    # logger.info(container_list_file)
     with open(container_list_file[0], 'r') as f:
         keys = ['id', 'localizedName', 'documents', 'Public', 'clients']
         for line in f:
@@ -70,7 +72,7 @@ def parsedumpfile(container_dump_file):
                 current_section += line
         if current_section != "":
             dump[section] = current_section
-    # print(dump.keys())
+    # logger.info(dump.keys())
 
     # parsing different sections
     # header
@@ -362,7 +364,7 @@ def main():
     """
 
     if sys.version_info[0] < 3:
-        print("Must be using Python 3! Exiting ...")
+        logger.info("Must be using Python 3! Exiting ...")
         exit(-1)
 
     arguments = docopt(__doc__, version='parser for brctl files v0.1')
@@ -374,9 +376,9 @@ def main():
 
             brctl_parsing = {**parselistfile(container_list_file), **parsedumpfile(container_dump_file)}
 
-            print(json.dumps(brctl_parsing, indent=4))
+            logger.info(json.dumps(brctl_parsing, indent=4))
         except Exception as e:
-            print(f'error retrieving log files. Reason: {str(e)}')
+            logger.info(f'error retrieving log files. Reason: {str(e)}')
 
     return
 

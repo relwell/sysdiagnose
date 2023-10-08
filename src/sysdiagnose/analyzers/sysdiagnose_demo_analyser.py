@@ -24,7 +24,7 @@ def generate_something(jsondir, filename):
     """
     Generate the timeline and save it to filename
     """
-    print("DO SOMETHING HERE")
+    logger.info("DO SOMETHING HERE")
     return
 
 
@@ -35,10 +35,10 @@ def generate_something(jsondir, filename):
 def main():
 
     if sys.version_info[0] < 3:
-        print("Must be using Python 3! Exiting ...")
+        logger.info("Must be using Python 3! Exiting ...")
         exit(-1)
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -d JSON directory\n"
 
@@ -59,11 +59,11 @@ def main():
     if options.inputdir:
         # do something
         if options.outputfile:
-            print("Hello World")
+            logger.info("Hello World")
         else:
-            print("Something else")
+            logger.info("Something else")
     else:
-        print("WARNING -i option is mandatory!")
+        logger.info("WARNING -i option is mandatory!")
 
 
 # --------------------------------------------------------------------------- #

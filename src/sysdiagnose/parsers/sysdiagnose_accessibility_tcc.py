@@ -4,9 +4,12 @@
 # Script to print from Accessibility TCC logs
 # Author: david@autopsit.org
 
+import logging
 import os
 import sys
 from optparse import OptionParser
+
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-Accessibility-TCC.py v2020-20-20 Version 1.0"
 
@@ -35,7 +38,7 @@ def print_accessibility_tcc(inputfile):
     sys.path.append(os.path.abspath('../'))
     from utils import times
     from utils import sqlite2json
-    print(sqlite2json.dump2json(get_accessibility_tcc(inputfile)))
+    logger.info(sqlite2json.dump2json(get_accessibility_tcc(inputfile)))
     return
 
 
@@ -46,7 +49,7 @@ def main():
         Main function, to be called when used as CLI tool
     """
 
-    print(f"Running {version_string}\n")
+    logger.info(f"Running {version_string}\n")
 
     usage = "\n%prog -i inputfile\n"
 

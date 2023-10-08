@@ -6,12 +6,14 @@
 # Author: cheeky4n6monkey@gmail.com
 #
 # Change log: David DURVAUX - add function are more granular approach
-
+import logging
 import sys
 import json
 import pprint
 import plistlib
 from optparse import OptionParser
+
+logger = logging.getLogger()
 
 version_string = "sysdiagnose-uuid2path.py v2020-02-07 Version 2.0"
 
@@ -34,12 +36,12 @@ def getUUID2path(filename, ios_version=13):
             uuid2path = {}
             for uuid, path in pl.items():
                 if uuid in uuid2path.keys():
-                    print("WARNING: duplicate UUID found!!")
+                    logger.info("WARNING: duplicate UUID found!!")
                 uuid2path[uuid] = path
             fp.close()
             return uuid2path
     except Exception as e:
-        print(f"Could not parse {filename}. Reason: {str(e)}")
+        logger.info(f"Could not parse {filename}. Reason: {str(e)}")
     return None
 
 
@@ -49,8 +51,8 @@ def printResult(json):
     """
     if json:
         for uuid in json.keys():
-            print(f"{str(uuid)}, {str(json[uuid])}")
-    print(f"\n {str(len(json.keys()))} GUIDs found\n")
+            logger.info(f"{str(uuid)}, {str(json[uuid])}")
+    logger.info(f"\n {str(len(json.keys()))} GUIDs found\n")
     return
 
 
@@ -67,7 +69,7 @@ def export_to_json(_dict, filename="./uuid2path.json"):
         with open(filename, "w") as fd:
             json.dump(data, fd)
     except Exception as e:
-        print(f"Could not dump the JSON dict to {filename}. Reason: {str(e)}\n")
+        logger.info(f"Could not dump the JSON dict to {filename}. Reason: {str(e)}\n")
     return
 
 
@@ -77,7 +79,7 @@ def exportToMISP(json):     # XXX FIXME: to be deleted . Should be not in the pa
 
         TODO -  implement ;)
     """
-    print("NOT IMPLEMENTED")
+    logger.info("NOT IMPLEMENTED")
     return
 
 
@@ -93,7 +95,7 @@ def main():
 
     # no arguments given by user, print help and exit
     if options.inputfile:
-        print(f"Running {version_string}\n")
+        logger.info(f"Running {version_string}\n")
         printResult(getUUID2path(options.inputfile))
     else:
         parser.print_help()

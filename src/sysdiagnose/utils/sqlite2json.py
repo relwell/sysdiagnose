@@ -9,10 +9,13 @@
 #   ./logs/powerlogs/powerlog_2019-11-07_17-23_ED7F7E2B.PLSQL
 #   ./logs/Accessibility/TCC.db
 #   ./logs/appinstallation/appstored.sqlitedb
+import logging
 import sys
 import json
 import sqlite3
 from optparse import OptionParser
+
+logger = logging.getLogger()
 
 version_string = "sqlite2json.py v2020-02-18 Version 1.0"
 
@@ -32,7 +35,7 @@ def sqlite2struct(dbpath):
             dbstruct[table] = content
         return dbstruct
     except Exception as e:
-        print(f"Could not parse {dbpath}. Reason: {str(e)}", file=sys.stderr)
+        logger.info(f"Could not parse {dbpath}. Reason: {str(e)}", file=sys.stderr)
     return None
 
 
@@ -74,7 +77,7 @@ def dump2json(dbstruct, jsonpath="./db.json"):
         with open(jsonpath, "w") as fd:
             fd.write(jsontxt)
     except Exception as e:
-        print(f"Impossible to dump the UUID to Path to {jsonpath}. Reason: {str(e)}\n", file=sys.stderr)
+        logger.info(f"Impossible to dump the UUID to Path to {jsonpath}. Reason: {str(e)}\n", file=sys.stderr)
     return jsontxt
 
 # --------------------------------------------------------------------------- #
@@ -82,7 +85,7 @@ def dump2json(dbstruct, jsonpath="./db.json"):
 
 def main():
     if sys.version_info[0] < 3:
-        print("Must be using Python 3! Exiting ...", file=sys.stderr)
+        logger.info("Must be using Python 3! Exiting ...", file=sys.stderr)
         sys.exit(-1)
 
     usage = "\n%prog -i inputfile\n"
@@ -95,8 +98,8 @@ def main():
 
     # no arguments given by user, print help and exit
     if options.inputfile:
-        print(f"Running {version_string}\n")
-        print(sqlite2struct(options.inputfile))
+        logger.info(f"Running {version_string}\n")
+        logger.info(sqlite2struct(options.inputfile))
     else:
         parser.print_help()
         sys.exit(-1)

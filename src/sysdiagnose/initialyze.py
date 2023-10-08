@@ -25,11 +25,14 @@ import tarfile
 import json
 import hashlib
 import glob
+import logging
 from docopt import docopt
 
-from misc import get_version
+from sysdiagnose.misc import get_version
 
 version = get_version()
+
+logger = logging.getLogger()
 
 
 """
@@ -38,22 +41,23 @@ version = get_version()
 
 
 def init(sysdiagnose_file, force=False):
+    cases = {"cases": []}
     # open case json file
     try:
         with open(config.cases_file, 'r') as f:
             cases = json.load(f)
     except Exception as e:
-        print(f'error opening cases json file - check config.py. Failure reason: f{str(e)}')
-        sys.exit()
+        logger.exception(f'error opening cases json file - check config.py. Failure reason: f{str(e)}')
+        raise
 
     # calculate sha256 of sysdiagnose file and compare with past cases
     try:
         with open(sysdiagnose_file, 'rb') as f:
             bytes = f.read()  # read entire file as bytes
             readable_hash = hashlib.sha256(bytes).hexdigest()
-            print(readable_hash)
+            logger.info(readable_hash)
     except Exception as e:
-        print(f'error calculating sha256. Reason: {str(e)}')
+        logger.exception(f'error calculating sha256. Reason: {str(e)}')
     case_id = 0
     for case in cases['cases']:
         # Take the opportunity to find the highest case_id
@@ -62,15 +66,15 @@ def init(sysdiagnose_file, force=False):
             if force:
                 case_id = case['case_id'] -1
             else:
-                print(f"this sysdiagnose has already been extracted : caseID: {str(case['case_id'])}")
-                sys.exit()
+                logger.error(f"this sysdiagnose has already been extracted : caseID: {str(case['case_id'])}")
+                return
 
     # test sysdiagnose file
     try:
         tf = tarfile.open(sysdiagnose_file)
     except Exception as e:
-        print(f'error opening sysdiagnose file. Reason: {str(e)}')
-        sys.exit()
+        logger.exception(f'error opening sysdiagnose file. Reason: {str(e)}')
+        raise
 
     # if sysdiagnose file is new and legit, create new case and extract files
     # create case dictionnary
@@ -92,12 +96,12 @@ def init(sysdiagnose_file, force=False):
 
     # extract sysdiagnose files
     if config.debug:
-        print(f"cd'ing to {new_folder}")
+        logger.debug(f"cd'ing to {new_folder}")
     os.chdir(new_folder)
     try:
         tf.extractall()
     except Exception as e:
-        print(f'Error while decompressing sysdiagnose file. Reason: {str(e)}')
+        logger.exception(f'Error while decompressing sysdiagnose file. Reason: {str(e)}')
 
     # create case json file
     new_case_json = {
@@ -256,11 +260,11 @@ def init(sysdiagnose_file, force=False):
     except:        # noqa: E722
         pass
 
-    # print(json.dumps(new_case_json, indent=4))
+    # logger.info(json.dumps(new_case_json, indent=4))
 
     # Get iOS version
     if config.debug:
-        print(f"cd'ing to ../..")
+        logger.debug(f"cd'ing to ../..")
     os.chdir('../..')
     try:
         with open(new_case_json['sysdiagnose.log'], 'r') as f:
@@ -268,8 +272,8 @@ def init(sysdiagnose_file, force=False):
             version=line_version.split()[4]
         new_case_json['ios_version']=version
     except Exception as e:
-        print(f"Could not open file {new_case_json['sysdiagnose.log']}. Reason: {str(e)}")
-        sys.exit()
+        logger.exception(f"Could not open file {new_case_json['sysdiagnose.log']}. Reason: {str(e)}")
+        raise
 
     # Save JSON file
     with open(new_case['case_file'], 'w') as data_file:
@@ -281,8 +285,12 @@ def init(sysdiagnose_file, force=False):
     with open(config.cases_file, 'w') as data_file:
         data_file.write(json.dumps(cases, indent=4))
 
-    print("Sysdiagnose file has been processed")
-    print(f"New case ID: {str(new_case['case_id'])}")
+    new_case["data"] = new_case_json
+
+    logger.info("Sysdiagnose file has been processed")
+    logger.info(f"New case ID: {str(new_case['case_id'])}")
+
+    return new_case
 
 
 """
@@ -309,7 +317,7 @@ def integrity_check():
 def main():
 
     if sys.version_info[0] < 3:
-        print("Still using Python 2 ?!?")
+        logger.info("Still using Python 2 ?!?")
         sys.exit(-1)
 
     arguments = docopt(__doc__, version=f'Sysdiagnose initialize script {version}')
@@ -318,9 +326,9 @@ def main():
 
     if arguments['file']:
         if os.path.realpath(arguments['<sysdiagnose_file>']):
-            init(arguments['<sysdiagnose_file>'], arguments['--force'])
+            init(arguments['<sysdiagnose_file>'], arguments['--force'], do_print=True, write_cases=True, use_file=True)
         else:
-            print("file not found")
+            logger.info("file not found")
             sys.exit()
 
 

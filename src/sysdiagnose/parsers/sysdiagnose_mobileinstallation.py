@@ -16,6 +16,7 @@ Options:
   -v --version     Show version.
 """
 
+import logging
 import sys
 from optparse import OptionParser
 import plistlib
@@ -24,6 +25,8 @@ from docopt import docopt
 from tabulate import tabulate
 import glob
 import re
+
+logger = logging.getLogger()
 
 
 # ----- definition for parsing.py script -----#
@@ -75,10 +78,10 @@ def parsemobinstall(loglist):
 def buildlogentry(line):
     entry = {}
     # timestamp
-    print(line)
+    logger.info(line)
     timeregex = re.search(r"(?<=^)(.*)(?= \[[0-9]+)", line)  # Regex for timestamp
     timestamp = timeregex.group(1)
-    print(timestamp)
+    logger.info(timestamp)
     weekday, month, day, time, year = (str.split(timestamp))
     day = day_converter(day)
     month = month_converter(month)
@@ -124,9 +127,9 @@ def main():
         try:
             loglist = glob.glob(arguments['<logfolder>'] + '/mobile_installation.log*')
             events = parsemobinstall(loglist)
-            print(json.dumps(events, indent=4))
+            logger.info(json.dumps(events, indent=4))
         except Exception as e:
-            print(f'error retrieving log files. Reason: {str(e)}')
+            logger.info(f'error retrieving log files. Reason: {str(e)}')
     # test
 
     return 0
