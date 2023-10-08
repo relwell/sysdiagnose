@@ -19,7 +19,7 @@ Options:
   -v --version     Show version.
 """
 
-import config
+import sysdiagnose.config as config
 
 import json
 import os

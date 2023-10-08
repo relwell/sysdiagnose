@@ -14,7 +14,7 @@ import biplist
 from biplist import Uid, Data
 from datetime import datetime
 
-import config
+import sysdiagnose.config as config
 
 
 class CustomEncoder(json.JSONEncoder):

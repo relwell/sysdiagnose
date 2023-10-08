@@ -17,7 +17,7 @@ Options:
   -v --version     Show version.
 """
 
-import config
+import sysdiagnose.config as config
 
 import sys
 import os
