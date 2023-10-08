@@ -31,8 +31,8 @@ dependencies = [
     "python-dateutil>=2.8.2"
 ]
 dynamic = ["version"]
-package_dir = "=src"
-packages = "find_namespace:"
+package-dir = "=src"
+packages = ["find_namespace:"]
 
 [tool.setuptools.packages.find]
 where = ["src"]
