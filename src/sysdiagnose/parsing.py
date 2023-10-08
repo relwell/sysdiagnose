@@ -157,10 +157,10 @@ def parse_all(case_id, denylist=[]):
     os.chdir('..')
     result = []
     for parser in modules:
+        key = parse[:-3]
         if key in denylist:
             continue
         started = time.time()
-        key = parse[:-3]
         try:
             logger.info(f"Trying: {key}")
             result.append(
