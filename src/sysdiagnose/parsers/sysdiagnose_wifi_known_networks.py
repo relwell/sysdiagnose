@@ -53,11 +53,11 @@ def getKnownWifiNetworks(plistfiles=[], ios_version=13):
                 with open(path, 'rb') as fp:
                     result = biplist.readPlist(fp)
                     if config.debug:
-                        logger.info(f"Type (result) = {type(result)}", file=sys.stderr)
-                        logger.info(f"XXXX DEBUG:", file=sys.stderr)
-                        logger.info(json.dumps(result, indent=4, cls=CustomEncoder), file=sys.stderr)
+                        logger.info(f"Type (result) = {type(result)}", )
+                        logger.info(f"XXXX DEBUG:", )
+                        logger.info(json.dumps(result, indent=4, cls=CustomEncoder), )
             except Exception as e:
-                logger.info(f"Could not parse {path}. Reason: {str(e)}", file=sys.stderr)
+                logger.info(f"Could not parse {path}. Reason: {str(e)}", )
     return json.loads(json.dumps(result, indent=4, cls=CustomEncoder))
 
 
@@ -76,9 +76,9 @@ def main():
 
     if options.inputfile:
         pl = getKnownWifiNetworks(options.inputfile)
-        logger.info(json.dumps(pl, indent=4, cls=CustomEncoder), file=sys.stderr)
+        logger.info(json.dumps(pl, indent=4, cls=CustomEncoder), )
     else:
-        logger.info("WARNING -i option is mandatory!", file=sys.stderr)
+        logger.info("WARNING -i option is mandatory!", )
 
 
 # --------------------------------------------------------------------------- #

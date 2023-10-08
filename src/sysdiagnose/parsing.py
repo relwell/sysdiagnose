@@ -43,7 +43,7 @@ def list_cases(case_file):
         with open(config.cases_file, 'r') as f:
             cases = json.load(f)
     except Exception as e:
-        logger.info(f'error opening cases json file - check config.py. Reason: {str(e)}', file=sys.stderr)
+        logger.info(f'error opening cases json file - check config.py. Reason: {str(e)}', )
         sys.exit()
 
     logger.info("#### case List ####")
@@ -90,7 +90,7 @@ def parse(parser, case_id):
         with open(config.cases_file, 'r') as f:
             cases = json.load(f)
     except Exception as e:
-        logger.info(f'error opening cases json file - check config.py. Error: {str(e)}', file=sys.stderr)
+        logger.info(f'error opening cases json file - check config.py. Error: {str(e)}', )
         sys.exit()
 
     case_file = ''
@@ -99,7 +99,7 @@ def parse(parser, case_id):
             case_file = case['case_file']
 
     if case_file == '':
-        logger.info("Case ID not found", file=sys.stderr)
+        logger.info("Case ID not found", )
         sys.exit()
 
     # Load case file
@@ -107,14 +107,14 @@ def parse(parser, case_id):
         with open(case_file, 'r') as f:
             case = json.load(f)
     except:     # noqa: E722
-        logger.info("error opening case file", file=sys.stderr)
+        logger.info("error opening case file", )
         sys.exit()
 
-    # logger.info(json.dumps(case, indent=4), file=sys.stderr)   #debug
+    # logger.info(json.dumps(case, indent=4), )   #debug
 
     # Load parser module
     spec = importlib.util.spec_from_file_location(parser[:-3], config.parsers_folder + parser + '.py')
-    logger.info(spec, file=sys.stderr)
+    logger.info(spec, )
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
 
@@ -128,7 +128,7 @@ def parse(parser, case_id):
     # try:
     #    result = eval(command)
     # except Exception as e:
-    #    logger.info(f'Error trying to parse {case[module.parser_input]}: {str(e)}', file=sys.stderr)
+    #    logger.info(f'Error trying to parse {case[module.parser_input]}: {str(e)}', )
 
     result = eval(command)
 
@@ -137,7 +137,7 @@ def parse(parser, case_id):
     with open(output_file, 'w') as data_file:
         data_file.write(json.dumps(result, indent=4))
 
-    logger.info(f'Execution success, output saved in: {output_file}', file=sys.stderr)
+    logger.info(f'Execution success, output saved in: {output_file}', )
 
     return result
 
@@ -175,12 +175,12 @@ def parse_all(case_id):
 def main():
 
     if sys.version_info[0] < 3:
-        logger.info("Still using Python 2 ?!?", file=sys.stderr)
+        logger.info("Still using Python 2 ?!?", )
         sys.exit(-1)
 
     arguments = docopt(__doc__, version='Sysdiagnose parsing script v0.1')
 
-    # logger.info(arguments, file=sys.stderr)
+    # logger.info(arguments, )
 
     if arguments['list'] and arguments['cases']:
         list_cases(config.cases_file)
@@ -190,12 +190,12 @@ def main():
         if arguments['<case_number>'].isdigit():
             parse(arguments['<parser>'], arguments['<case_number>'])
         else:
-            logger.info("case number should be ... a number ...", file=sys.stderr)
+            logger.info("case number should be ... a number ...", )
     elif arguments['allparsers']:
         if arguments['<case_number>'].isdigit():
             parse_all(arguments['<case_number>'])
         else:
-            logger.info("case number should be ... a number ...", file=sys.stderr)
+            logger.info("case number should be ... a number ...", )
 
 
 """

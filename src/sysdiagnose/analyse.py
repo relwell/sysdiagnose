@@ -57,7 +57,7 @@ def list_analysers(folder):
 def analyse(analyser, caseid):
     # Load parser module
     spec = importlib.util.spec_from_file_location(analyser[:-3], config.analysers_folder + "/" + analyser + '.py')
-    logger.info(spec, file=sys.stderr)
+    logger.error(spec)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
 
@@ -67,7 +67,7 @@ def analyse(analyser, caseid):
     command = "module.%s('%s', '%s')" % (module.analyser_call, parse_data_path, output_file)
     result = eval(command)
 
-    logger.info(f'Execution success, output saved in: {output_file}', file=sys.stderr)
+    logger.info(f'Execution success, output saved in: {output_file}')
 
     return 0
 
@@ -92,7 +92,7 @@ def main():
     Main function
     """
     if sys.version_info[0] < 3:
-        logger.info("Must be using Python 3! Exiting ...", file=sys.stderr)
+        logger.info("Must be using Python 3! Exiting ...", )
         sys.exit(-1)
 
     arguments = docopt(__doc__, version=version_string)
@@ -104,14 +104,14 @@ def main():
         if arguments['<case_number>'].isdigit():
             analyse(arguments['<analyser>'], arguments['<case_number>'])
         else:
-            logger.info("case number should be ... a number ...", file=sys.stderr)
+            logger.info("case number should be ... a number ...", )
     elif arguments['allanalysers']:
         if arguments['<case_number>'].isdigit():
             allanalysers(arguments['<case_number>'])
         else:
-            logger.info("case number should be ... a number ...", file=sys.stderr)
+            logger.info("case number should be ... a number ...", )
 
-    logger.info(f"Running {version_string}\n", file=sys.stderr)
+    logger.info(f"Running {version_string}\n", )
     return
 
 

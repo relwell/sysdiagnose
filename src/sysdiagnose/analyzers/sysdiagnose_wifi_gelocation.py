@@ -45,7 +45,7 @@ def generate_gpx(jsonfile: str, outfile: str = "wifi-geolocations.gpx"):
 
     json_entry = json_data.get('com.apple.wifi.known-networks.plist')
     if not json_entry:
-        logger.info("Could not find the 'com.apple.wifi.known-networks.plist' section. Bailing out.", file=sys.stderr)
+        logger.info("Could not find the 'com.apple.wifi.known-networks.plist' section. Bailing out.", )
         sys.exit(-2)
     json_data = json_entry      # start here
 

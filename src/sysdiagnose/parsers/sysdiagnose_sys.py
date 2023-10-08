@@ -50,10 +50,10 @@ def getProductInfo(path="./logs/SystemVersion/SystemVersion.plist", ios_version=
             if key in plist.keys():
                 result[key] = plist[key]
             else:
-                logger.info(f"WARNING: {key} not found in plist file {path}. Ignoring key.", file=sys.stderr)
+                logger.info(f"WARNING: {key} not found in plist file {path}. Ignoring key.", )
         fd.close()
     except Exception as e:
-        logger.info(f"Could not parse {path}. Reason: {str(e)}", file=sys.stderr)
+        logger.info(f"Could not parse {path}. Reason: {str(e)}", )
     return result
 
 
@@ -62,7 +62,7 @@ def main():
         Main function, to be called when used as CLI tool
     """
     if sys.version_info[0] < 3:
-        logger.info("Must be using Python 3! Exiting ...", file=sys.stderr)
+        logger.info("Must be using Python 3! Exiting ...", )
         sys.exit(-1)
 
     logger.info(f"Running {version_string}\n")
@@ -80,7 +80,7 @@ def main():
         logger.info(f"ProductVersion = {pl['ProductVersion']}")
         logger.info(f"ProductBuildVersion = {pl['ProductBuildVersion']}")
     else:
-        logger.info("WARNING -i option is mandatory!", file=sys.stderr)
+        logger.info("WARNING -i option is mandatory!", )
 
 
 # --------------------------------------------------------------------------- #
