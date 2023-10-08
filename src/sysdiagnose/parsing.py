@@ -27,6 +27,7 @@ import os
 import sys
 import importlib.util
 import glob
+import time
 from tabulate import tabulate
 from docopt import docopt
 
@@ -147,7 +148,7 @@ def parse(parser, case_id):
 """
 
 
-def parse_all(case_id):
+def parse_all(case_id, denylist=[]):
     # get list of working parsers
     # for each parser, run and save which is working
     # display list of successful parses
@@ -156,15 +157,20 @@ def parse_all(case_id):
     os.chdir('..')
     result = []
     for parser in modules:
+        if key in denylist:
+            continue
+        started = time.time()
+        key = parse[:-3]
         try:
-            logger.info(f"Trying: {parser[:-3]}")
+            logger.info(f"Trying: {key}")
             result.append(
-                {"parser": parser[:-3], "result": parse(parser[:-3], case_id)}
+                {"parser": key, "result": parse(key, case_id)}
             )
-            logger.info(f"Successfully parsed {parser[:-3]}")
+            logger.debug(f"Successfully parsed key", extra={"data": result[-1]["result"]})
         except Exception:
-            if parser[:-3] != "sysdiagnose_demo_parser":
+            if key != "sysdiagnose_demo_parser":
                 logger.exception("Couldn't parse %s", parser[:-3])
+        logger.info("Finished {key} in %.2f", time.time() - started)
 
     return result
 
