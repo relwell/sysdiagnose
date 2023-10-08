@@ -157,7 +157,7 @@ def parse_all(case_id):
     result = []
     for parser in modules:
         try:
-            logger.info(f"Trying: {parser[:-3]}", file=sys.stderr)
+            logger.info(f"Trying: {parser[:-3]}")
             result.append(
                 {"parser": parser[:-3], "result": parse(parser[:-3], case_id)}
             )

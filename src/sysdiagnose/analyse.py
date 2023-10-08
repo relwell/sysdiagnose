@@ -78,7 +78,7 @@ def allanalysers(caseid):
     os.chdir('..')
     for analyser in modules:
         try:
-            logger.info(f'Trying: {analyser[:-3]}', file=sys.stderr)
+            logger.error(f'Trying: {analyser[:-3]}')
             analyse(analyser[:-3], caseid)
         except:     # noqa: E722
             continue
